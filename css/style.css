@@ -1,0 +1,129 @@
+/* defaults  colours*/
+:root{
+    --primary-color: #047aed;
+    --secondary-color: #1c3fa8;
+    --dark-color: #002240;
+    --light-color: #f4f4f4;
+    --success-color: #5cb85c;
+    --error-color: #d9534f;
+}
+/* default resets */
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0% ; 
+}
+ul{
+    list-style-type: none;
+}
+a{
+    text-decoration: none;
+    color: #333;
+    
+}
+/* default fonts and colors of body */
+body{
+    font-family: "lato" , "sans-serif";
+    color: #333;
+    line-height: 1.6; 
+}
+
+/* registration form */
+.regform{
+    background-color:var(--light-color);
+    width: 40%;
+    margin: 10px auto;
+    animation: slideInFromRight 1s ease-in;
+    min-width: 400px;
+   
+}
+ /* table of registration from */
+.regform table{
+
+    width: 80%;
+    table-layout: fixed;
+    padding: 4px;
+    margin-left: 10%;
+    margin-right: 10%;
+
+}
+table td{
+    padding: 4px;
+}
+/* confimation form */
+.confirm{
+    margin-top: 10%;
+    display: flex;  
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.confirm h1{
+    
+    margin: 15px 0px;
+}
+/* column width percetages */
+.ten {
+    width: 10%;
+    
+}
+.twenty {
+    width: 40%;
+}
+.fourty {
+    width: 60%;
+   
+}
+/* profile image section */
+.profile{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+/* progile image */
+.profile img{
+    width: 200;
+    height: 200;
+}
+
+.regform input[type="text"],
+.regform input[type="email"]{
+
+    border: 0px;
+    border-bottom: 1px solid #b4becb;
+    padding:  3px;
+    width: 100%; 
+    font-size: 16px;
+    justify-self: center;
+}
+
+.showcase-form input:focus{
+     outline: none;
+}
+
+.error {
+    color: red;
+    font-family: sans-serif;
+    font-size: 10px;
+    margin: 0px;
+    /* display: block; */
+    display: none;
+}
+._button {
+    background-color: #3b85e7; /* Green */
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 16px;
+    
+  }
+._button:hover{
+    background-color: #1368d8;
+    transform: scale(1.1);    
+}
