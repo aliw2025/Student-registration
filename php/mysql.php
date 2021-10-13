@@ -26,7 +26,7 @@ class Mysql extends Dbconfig {
         $this -> passCode = $dbPara ->passCode;
         $dbPara = NULL;
     }
-    //  funcion to create dbconnection
+    //// funcion to create dbconnection
     function dbConnect()    {
         
         $this -> connectionString = mysqli_connect($this -> serverName,$this -> userName,$this -> passCode);
