@@ -1,103 +1,51 @@
 <?php
-// including the config file
-include '../config/dbconfig.php';
 
 // class for connection with mysql database
-class Mysql extends Dbconfig {
-    // class datamembers
-    public $connectionString;
-    public $dataSet;
-    private $sqlQuery;
-    
-    protected $databaseName;
-    protected $hostName;
-    protected $userName;
-    protected $passCode;
-    // default constructor
-    function __construct() {
-        $this -> connectionString = NULL;
-        $this -> sqlQuery = NULL;
-        $this -> dataSet = NULL;
+class MysqlHandler
+{
 
-        $dbPara = new Dbconfig();
-        $this -> databaseName = $dbPara -> dbName;
-        $this -> hostName = $dbPara -> serverName;
-        $this -> userName = $dbPara -> userName;
-        $this -> passCode = $dbPara ->passCode;
-        $dbPara = NULL;
-    }
-    //// funcion to create dbconnection
-    function dbConnect()    {
-        
-        $this -> connectionString = mysqli_connect($this -> serverName,$this -> userName,$this -> passCode);
-        mysqli_select_db($this -> connectionString,$this -> databaseName);
-        return $this -> connectionString;
-    }
-    //  function to close dbconnection
-    function dbDisconnect() {
-        $this -> connectionString = NULL;
-        $this -> sqlQuery = NULL;
-        $this -> dataSet = NULL;
-        $this -> databaseName = NULL;
-        $this -> hostName = NULL;
-        $this -> userName = NULL;
-        $this -> passCode = NULL;
-    }
-    //  function to select all data from datbase
-    function selectAll($tableName)  {
-        $this -> sqlQuery = 'SELECT * FROM '.$this -> databaseName.'.'.$tableName;
-        $this -> dataSet = mysqli_query($this -> connectionString,$this -> sqlQuery);
-        
-        return $this -> dataSet;
-    }
-    //  query table with where clause
-    function selectWhere($tableName,$rowName,$operator,$value,$valueType)   {
-        $this -> sqlQuery = 'SELECT * FROM '.$tableName.' WHERE '.$rowName.' '.$operator.' ';
-        if($valueType == 'int') {
-            $this -> sqlQuery .= $value;
-        }
-        else if($valueType == 'char')   {
-            $this -> sqlQuery .= "'".$value."'";
-        }
-        $this -> dataSet = mysql_query($this -> sqlQuery,$this -> connectionString);
-        $this -> sqlQuery = NULL;
-        return $this -> dataSet;
-        #return $this -> sqlQuery;
-    }
+    private $host;
+    private $user;
+    private $password;
+    private $dbname;
+    private $dsn;
+    private $pdo;
 
-    //  insert class
-    function insertInto($tableName,$values) {
-        $i = NULL;
+    function __construct($host, $user, $password, $dbname)
+    {
 
-        $this -> sqlQuery = 'INSERT INTO '.$tableName.' VALUES (';
-        $i = 0;
-        while($values[$i]["val"] != NULL && $values[$i]["type"] != NULL) {
-            if($values[$i]["type"] == "char") {
-                $this -> sqlQuery .= "'";
-                $this -> sqlQuery .= $values[$i]["val"];
-                $this -> sqlQuery .= "'";
-            }
-            else if($values[$i]["type"] == 'int') {
-                $this -> sqlQuery .= $values[$i]["val"];
-            }
-            $i++;
-            if($values[$i]["val"] != NULL)  {
-                $this -> sqlQuery .= ',';
-            }
+        $this->host = $host;
+        $this->user = $user;
+        $this->password = $password;
+        $this->dbname = $dbname;
+        $this->createDsn();
+        $this->createPDO();
+    }
+    function createDsn()
+    {
+        $this->dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->dbname;
+    }
+    function getDsn()
+    {
+
+        return $this->dsn;
+    }
+    function createPDO()
+    {
+        try {
+            $this->pdo =  new PDO($this->dsn, $this->user, $this->password);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
         }
-        $this -> sqlQuery .= ')';
-        #echo $this -> sqlQuery;
-        mysql_query($this -> sqlQuery,$this ->connectionString);
-        return $this -> sqlQuery;
-        #$this -> sqlQuery = NULL;
     }
-    // direct select exection query
-    function selectFreeRun($query) {
-        $this -> dataSet = mysql_query($query,$this -> connectionString);
-        return $this -> dataSet;
-    }
-    // direct query
-    function freeRun($query) {
-        return mysql_query($query,$this -> connectionString);
+    function fetchAllFromTable($table)
+    {
+        $sql = 'select * from ' . $table;
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([]);
+        $all = $stmt->fetchAll();
+        return $all;
     }
 }

@@ -2,24 +2,29 @@
 <?php
 include "./mysql.php";
 
-$mysqlHandler = new Mysql();
-$mysqlHandler->dbconnect();
-$result = $mysqlHandler->selectAll("stocks");
-if ($result) {
-    
-    $rowcount=mysqli_num_rows($result);
-    printf("Result set has %d rows.<br>",$rowcount);
-    $i=0;
-    while($row = mysqli_fetch_row($result)){
-       $i=$i+1;
-        echo "row ".$i.": ". $row[0]." ". $row[1]." ".$row[2]."<br>";
-    }
+$mysqlHandle = new MysqlHandler('localhost','root','','Test');
 
-}else{
-    
-    echo "empty result";
-}
-
-
+$rows = $mysqlHandle->fetchAllFromTable("cities");
 
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<select Name="State" onchange="validateCity(this.name)">
+             <option value="-1" selected>select..</option>
+            <?php 
+            foreach($rows as $row){
+                $selected="ac";
+                $selection = $row->City;
+                echo '<option '.$selected.' value="'.$selection.'">'.$selection.'</option>';
+            }
+            ?>
+          </select>
+</body>
+</html>
